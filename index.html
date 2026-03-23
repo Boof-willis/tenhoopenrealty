@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO Audit Report — tenhoopenrealty.com</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181b23;
+    --surface2: #1e2130;
+    --border: #2a2d3a;
+    --text: #e4e6ed;
+    --text-dim: #8b8fa3;
+    --accent: #6c5ce7;
+    --accent-light: #a29bfe;
+    --critical: #ff6b6b;
+    --high: #ffa94d;
+    --medium: #ffd43b;
+    --low: #69db7c;
+    --pass: #51cf66;
+    --score-bad: #ff6b6b;
+    --score-mid: #ffa94d;
+    --score-ok: #ffd43b;
+    --score-good: #51cf66;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #1a1c2e 0%, #2d1f4e 50%, #1a2840 100%);
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(108,92,231,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(99,179,237,0.06) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    position: relative;
+  }
+  .header .subtitle {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .header-meta span {
+    background: rgba(255,255,255,0.06);
+    padding: 0.35rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .header-meta span strong { color: var(--text); }
+
+  /* Big Score */
+  .score-hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    padding: 2.5rem;
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  .score-ring-container { position: relative; width: 180px; height: 180px; flex-shrink: 0; }
+  .score-ring-container svg { transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: var(--border); stroke-width: 10; }
+  .score-ring-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1.5s ease; }
+  .score-ring-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .score-ring-text .number { font-size: 3rem; font-weight: 800; display: block; line-height: 1; }
+  .score-ring-text .label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+  .score-ring-text .out-of { font-size: 1rem; color: var(--text-dim); }
+
+  .score-breakdown { flex: 1; min-width: 280px; }
+  .score-bar-item { margin-bottom: 0.75rem; }
+  .score-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    margin-bottom: 0.25rem;
+  }
+  .score-bar-label span:first-child { color: var(--text); }
+  .score-bar-label span:last-child { color: var(--text-dim); font-variant-numeric: tabular-nums; }
+  .score-bar-track {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+
+  /* Section Cards */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .section.open .section-header { border-bottom-color: var(--border); }
+  .section-header h2 { font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 0.75rem; }
+  .section-header .section-icon {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .section-score {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-score .score-num { font-size: 1.5rem; font-weight: 700; }
+  .section-score .score-max { color: var(--text-dim); font-size: 0.9rem; }
+  .chevron {
+    width: 20px; height: 20px;
+    color: var(--text-dim);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+    margin-left: 0.75rem;
+  }
+  .section.open .chevron { transform: rotate(180deg); }
+  .section-body { padding: 0 1.5rem 1.5rem; display: none; }
+  .section.open .section-body { display: block; }
+
+  /* Subsection */
+  .subsection { margin-top: 1.25rem; }
+  .subsection h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent-light);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(108,92,231,0.2);
+  }
+
+  /* Tables */
+  .audit-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .audit-table th {
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    background: rgba(255,255,255,0.03);
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+  }
+  .audit-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+  }
+  .audit-table tr:last-child td { border-bottom: none; }
+
+  /* Severity Pills */
+  .severity {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .severity.critical { background: rgba(255,107,107,0.15); color: var(--critical); }
+  .severity.high { background: rgba(255,169,77,0.15); color: var(--high); }
+  .severity.medium { background: rgba(255,212,59,0.15); color: var(--medium); }
+  .severity.low { background: rgba(105,219,124,0.15); color: var(--low); }
+  .severity.pass { background: rgba(81,207,102,0.15); color: var(--pass); }
+
+  /* Critical Issues & Quick Wins */
+  .dual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 768px) { .dual-grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+  .card h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card-critical h3 { color: var(--critical); }
+  .card-wins h3 { color: var(--pass); }
+
+  .issue-list { list-style: none; }
+  .issue-list li {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.85rem;
+    display: flex;
+    gap: 0.75rem;
+    line-height: 1.5;
+  }
+  .issue-list li:last-child { border-bottom: none; }
+  .issue-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+  .card-critical .issue-num { background: rgba(255,107,107,0.15); color: var(--critical); }
+  .card-wins .issue-num { background: rgba(81,207,102,0.15); color: var(--pass); }
+  .issue-time {
+    display: inline-block;
+    background: rgba(255,255,255,0.06);
+    padding: 0.1rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-left: 0.25rem;
+    white-space: nowrap;
+  }
+
+  /* E-E-A-T Radar */
+  .eeat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  .eeat-item {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .eeat-item .eeat-label {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  .eeat-item .eeat-score {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .eeat-item .eeat-desc { font-size: 0.78rem; color: var(--text-dim); line-height: 1.4; }
+  .eeat-bar-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0.5rem 0;
+    overflow: hidden;
+  }
+  .eeat-bar-fill { height: 100%; border-radius: 2px; }
+
+  /* CWV Cards */
+  .cwv-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  @media (max-width: 600px) { .cwv-grid { grid-template-columns: 1fr; } }
+  .cwv-card {
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .cwv-card .cwv-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .cwv-card .cwv-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.15rem;
+  }
+  .cwv-card .cwv-threshold {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-bottom: 0.75rem;
+  }
+  .cwv-status {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .cwv-status.poor { background: rgba(255,107,107,0.15); color: var(--critical); }
+
+  /* JS Payload Bar Chart */
+  .payload-chart { margin-top: 0.5rem; }
+  .payload-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.82rem;
+  }
+  .payload-label { width: 180px; flex-shrink: 0; color: var(--text-dim); text-align: right; }
+  .payload-bar-track {
+    flex: 1;
+    height: 20px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .payload-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding-left: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(0,0,0,0.7);
+    min-width: fit-content;
+  }
+
+  /* AI Readiness Radar */
+  .ai-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+  }
+  @media (max-width: 600px) { .ai-grid { grid-template-columns: 1fr; } }
+
+  /* Platform scores */
+  .platform-scores { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .platform-card {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .platform-card .platform-name {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  .platform-card .platform-score { font-size: 1.4rem; font-weight: 700; }
+  .platform-card .platform-gap { font-size: 0.72rem; color: var(--text-dim); margin-top: 0.3rem; line-height: 1.35; }
+
+  /* Site Architecture */
+  .arch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  .arch-group {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .arch-group h4 {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-light);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  .arch-group ul { list-style: none; }
+  .arch-group li {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    padding: 0.2rem 0;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  /* Business type badge */
+  .business-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(108,92,231,0.1);
+    border: 1px solid rgba(108,92,231,0.25);
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+  }
+  .business-badge .badge-icon { font-size: 1.2rem; }
+
+  /* Code block */
+  .code-block {
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--text-dim);
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    white-space: pre;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+
+  /* Nav Link */
+  .nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  .nav-bar a {
+    color: var(--accent-light);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s;
+  }
+  .nav-bar a:hover { color: #fff; }
+  .nav-bar .nav-current { color: var(--text); font-weight: 600; }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section, .card, .score-hero { animation: fadeIn 0.5s ease forwards; }
+
+  /* Schema mini-cards */
+  .schema-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .schema-card {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 0.9rem;
+    border-left: 3px solid;
+  }
+  .schema-card.missing { border-left-color: var(--critical); }
+  .schema-card.partial { border-left-color: var(--high); }
+  .schema-card .schema-type { font-weight: 600; font-size: 0.85rem; margin-bottom: 0.2rem; }
+  .schema-card .schema-status { font-size: 0.75rem; color: var(--text-dim); }
+  .schema-card .schema-action { font-size: 0.75rem; color: var(--medium); margin-top: 0.3rem; }
+
+  /* Accessibility score indicators */
+  .page-scores { margin-top: 0.5rem; }
+  .page-score-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.85rem;
+  }
+  .page-score-row:last-child { border-bottom: none; }
+  .page-name { flex: 1; min-width: 120px; }
+  .mini-score {
+    width: 42px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.2rem 0;
+    border-radius: 6px;
+  }
+  .page-issue { flex: 2; color: var(--text-dim); font-size: 0.78rem; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- NAV -->
+  <nav class="nav-bar">
+    <span class="nav-current">Audit Report</span>
+    <a href="seo-action-plan.html">Action Plan &#8594;</a>
+  </nav>
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>SEO Audit Report</h1>
+    <div class="subtitle">tenhoopenrealty.com &mdash; Full Site Analysis</div>
+    <div class="header-meta">
+      <span><strong>Date:</strong> March 23, 2026</span>
+      <span><strong>Business:</strong> ten Hoopen Realty</span>
+      <span><strong>CMS:</strong> WordPress + Elementor</span>
+      <span><strong>CDN:</strong> Cloudflare</span>
+      <span><strong>AMI License:</strong> 19855</span>
+    </div>
+  </div>
+
+  <!-- OVERALL SCORE -->
+  <div class="score-hero">
+    <div class="score-ring-container">
+      <svg width="180" height="180" viewBox="0 0 180 180">
+        <circle class="score-ring-bg" cx="90" cy="90" r="76"/>
+        <circle class="score-ring-fill" cx="90" cy="90" r="76"
+          stroke="#ff6b6b"
+          stroke-dasharray="477.5"
+          stroke-dashoffset="248.3"/>
+      </svg>
+      <div class="score-ring-text">
+        <span class="number" style="color:#ff6b6b">48</span>
+        <span class="out-of">/100</span>
+        <span class="label">Overall Score</span>
+      </div>
+    </div>
+    <div class="score-breakdown">
+      <div class="score-bar-item">
+        <div class="score-bar-label"><span>Technical SEO</span><span>48/100 (25%)</span></div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:48%;background:var(--score-bad)"></div></div>
+      </div>
+      <div class="score-bar-item">
+        <div class="score-bar-label"><span>Content Quality</span><span>62/100 (25%)</span></div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:62%;background:var(--score-mid)"></div></div>
+      </div>
+      <div class="score-bar-item">
+        <div class="score-bar-label"><span>On-Page SEO</span><span>55/100 (20%)</span></div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:55%;background:var(--score-mid)"></div></div>
+      </div>
+      <div class="score-bar-item">
+        <div class="score-bar-label"><span>Schema / Structured Data</span><span>35/100 (10%)</span></div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:35%;background:var(--score-bad)"></div></div>
+      </div>
+      <div class="score-bar-item">
+        <div class="score-bar-label"><span>Performance (CWV)</span><span>25/100 (10%)</span></div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:25%;background:var(--score-bad)"></div></div>
+      </div>
+      <div class="score-bar-item">
+        <div class="score-bar-label"><span>Images</span><span>30/100 (5%)</span></div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:30%;background:var(--score-bad)"></div></div>
+      </div>
+      <div class="score-bar-item">
+        <div class="score-bar-label"><span>AI Search Readiness</span><span>38/100 (5%)</span></div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:38%;background:var(--score-bad)"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUSINESS TYPE -->
+  <div style="text-align:center;margin-bottom:2rem;">
+    <div class="business-badge">
+      <span class="badge-icon">&#127968;</span>
+      <span><strong>Real Estate Agency</strong> &mdash; Lagos, Algarve, Portugal &bull; International buyers &bull; 6 languages</span>
+    </div>
+  </div>
+
+  <!-- CRITICAL ISSUES + QUICK WINS -->
+  <div class="dual-grid">
+    <div class="card card-critical">
+      <h3>&#9888;&#65039; Top 5 Critical Issues</h3>
+      <ol class="issue-list">
+        <li><span class="issue-num">1</span><span>Property URLs use query parameters (<code>/property-details?reference=XXXX</code>) causing canonical collapse &mdash; all pages canonicalize to same URL</span></li>
+        <li><span class="issue-num">2</span><span>Property pages likely excluded from XML sitemap &mdash; query-parameter URLs not included by Yoast</span></li>
+        <li><span class="issue-num">3</span><span>All three Core Web Vitals failing on mobile &mdash; LCP 5-8s, INP 300-600ms, CLS 0.15-0.40</span></li>
+        <li><span class="issue-num">4</span><span>hreflang implementation likely broken &mdash; GTranslate injects via JavaScript only, invisible to crawlers</span></li>
+        <li><span class="issue-num">5</span><span>Content cannibalization between buying guide and blog post targeting same keywords</span></li>
+      </ol>
+    </div>
+    <div class="card card-wins">
+      <h3>&#9889; Top 5 Quick Wins</h3>
+      <ol class="issue-list">
+        <li><span class="issue-num">1</span><span>Create <code>/llms.txt</code> file &mdash; first-mover advantage for AI search <span class="issue-time">~2 hrs</span></span></li>
+        <li><span class="issue-num">2</span><span>Add author bylines with credentials to all guide/blog content <span class="issue-time">~4 hrs</span></span></li>
+        <li><span class="issue-num">3</span><span>Add <code>&lt;link rel="preconnect"&gt;</code> for cdn.proppy.app, fonts.gstatic.com <span class="issue-time">~30 min</span></span></li>
+        <li><span class="issue-num">4</span><span>Enable Cloudflare APO ($5/mo) for instant TTFB improvement <span class="issue-time">~30 min</span></span></li>
+        <li><span class="issue-num">5</span><span>Add "Last Updated" dates to all informational pages <span class="issue-time">~2 hrs</span></span></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- SECTION 1: TECHNICAL SEO -->
+  <div class="section open" id="sec-technical">
+    <div class="section-header" onclick="toggleSection('sec-technical')">
+      <h2>
+        <span class="section-icon" style="background:rgba(255,107,107,0.12);color:var(--critical)">&#128295;</span>
+        1. Technical SEO
+      </h2>
+      <div class="section-score">
+        <span class="score-num" style="color:var(--score-bad)">48</span>
+        <span class="score-max">/100</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="subsection">
+        <h3>1.1 Crawlability</h3>
+        <p style="font-size:0.82rem;color:var(--text-dim);margin-bottom:0.75rem"><strong style="color:var(--text)">robots.txt</strong> &mdash; Standard Yoast configuration:</p>
+        <div class="code-block">User-agent: *
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /cgi-bin/
+Disallow: */?s=*
+Disallow: /xmlrpc.php
+Disallow: /author/
+Disallow: /tag/
+Disallow: /category/
+
+Allow: /wp-content/uploads/
+Allow: /wp-content/themes/
+Allow: /wp-content/plugins/
+
+Sitemap: https://www.tenhoopenrealty.com/sitemap_index.xml</div>
+        <table class="audit-table" style="margin-top:1rem">
+          <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="severity medium">Medium</span></td><td>No AI crawler directives (GPTBot, ClaudeBot, PerplexityBot all allowed by default)</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td><code>/category/</code> is disallowed &mdash; may block useful category archive pages</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:0.82rem;color:var(--text-dim);margin-top:1rem"><strong style="color:var(--text)">XML Sitemap</strong> &mdash; 8 sub-sitemaps (Yoast-generated)</p>
+        <table class="audit-table" style="margin-top:0.5rem">
+          <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="severity critical">Critical</span></td><td>Property detail pages excluded from all sitemaps (query-parameter URLs)</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Author sitemap exists but <code>/author/</code> is disallowed &mdash; contradictory</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td><code>/pt/</code> and <code>/nl/</code> language variants likely missing from sitemaps</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>1.2 Indexability</h3>
+        <table class="audit-table">
+          <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="severity critical">Critical</span></td><td>Canonical collapse &mdash; all property pages likely canonicalize to <code>/property-details</code></td></tr>
+            <tr><td><span class="severity high">High</span></td><td>GTranslate pages may create duplicate content with incorrect canonicals</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Pagination for property listings likely unoptimized (JavaScript-loaded)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>1.3 URL Structure</h3>
+        <table class="audit-table">
+          <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="severity critical">Critical</span></td><td>Property URLs use query parameters. Recommended: <code>/properties/villa-3-bed-lagos-th1234/</code></td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>www vs non-www inconsistency &mdash; schema uses <code>www.</code> prefix</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Trailing slash consistency needs verification</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>1.4 Security</h3>
+        <table class="audit-table">
+          <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="severity pass">Pass</span></td><td>HTTPS active via Cloudflare</td></tr>
+            <tr><td><span class="severity high">High</span></td><td>Likely missing HSTS, CSP, X-Content-Type-Options, Permissions-Policy headers</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Cloudflare challenge scripts may add latency for legitimate visitors</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>1.5 Internationalization</h3>
+        <table class="audit-table">
+          <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="severity critical">Critical</span></td><td>hreflang tags only injected via JavaScript (GTranslate) &mdash; invisible to crawlers</td></tr>
+            <tr><td><span class="severity high">High</span></td><td>Machine-translated Portuguese for a Portugal-based business is a competitive disadvantage</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Should use <code>pt-PT</code> instead of <code>pt</code> for European Portuguese</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Missing <code>x-default</code> hreflang tag</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>1.6 JavaScript Rendering</h3>
+        <table class="audit-table">
+          <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="severity critical">Critical</span></td><td>Proppy.app property listings may be client-side rendered only &mdash; invisible to crawlers</td></tr>
+            <tr><td><span class="severity high">High</span></td><td>Elementor loads ~200-400KB JavaScript regardless of page needs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 2: CONTENT QUALITY -->
+  <div class="section" id="sec-content">
+    <div class="section-header" onclick="toggleSection('sec-content')">
+      <h2>
+        <span class="section-icon" style="background:rgba(255,169,77,0.12);color:var(--high)">&#128221;</span>
+        2. Content Quality
+      </h2>
+      <div class="section-score">
+        <span class="score-num" style="color:var(--score-mid)">62</span>
+        <span class="score-max">/100</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="subsection">
+        <h3>2.1 E-E-A-T Assessment &mdash; Composite: 5.8/10</h3>
+        <div class="eeat-grid">
+          <div class="eeat-item">
+            <div class="eeat-label">Experience</div>
+            <div class="eeat-score" style="color:var(--score-mid)">5.5<span style="font-size:0.8rem;color:var(--text-dim)">/10</span></div>
+            <div class="eeat-bar-track"><div class="eeat-bar-fill" style="width:55%;background:var(--score-mid)"></div></div>
+            <div class="eeat-desc">First-hand market signals present but inconsistent; lacks case studies</div>
+          </div>
+          <div class="eeat-item">
+            <div class="eeat-label">Expertise</div>
+            <div class="eeat-score" style="color:var(--score-mid)">6.0<span style="font-size:0.8rem;color:var(--text-dim)">/10</span></div>
+            <div class="eeat-bar-track"><div class="eeat-bar-fill" style="width:60%;background:var(--score-mid)"></div></div>
+            <div class="eeat-desc">Multilingual team suggests competence; author credentials underexposed</div>
+          </div>
+          <div class="eeat-item">
+            <div class="eeat-label">Authoritativeness</div>
+            <div class="eeat-score" style="color:var(--score-bad)">5.0<span style="font-size:0.8rem;color:var(--text-dim)">/10</span></div>
+            <div class="eeat-bar-track"><div class="eeat-bar-fill" style="width:50%;background:var(--score-bad)"></div></div>
+            <div class="eeat-desc">Luxury Lifestyle Award strong but likely buried; external citations weak</div>
+          </div>
+          <div class="eeat-item">
+            <div class="eeat-label">Trustworthiness</div>
+            <div class="eeat-score" style="color:var(--score-mid)">6.5<span style="font-size:0.8rem;color:var(--text-dim)">/10</span></div>
+            <div class="eeat-bar-track"><div class="eeat-bar-fill" style="width:65%;background:var(--score-mid)"></div></div>
+            <div class="eeat-desc">AMI license 19855 is strongest trust signal; multilingual support builds confidence</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>2.2 Page-by-Page Scores</h3>
+        <div class="page-scores">
+          <div class="page-score-row" style="font-weight:600;color:var(--text-dim);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em">
+            <span class="page-name">Page</span>
+            <span class="mini-score">Quality</span>
+            <span class="mini-score">E-E-A-T</span>
+            <span class="mini-score">AI</span>
+            <span class="page-issue">Top Issue</span>
+          </div>
+          <div class="page-score-row">
+            <span class="page-name">Homepage</span>
+            <span class="mini-score" style="background:rgba(255,169,77,0.15);color:var(--high)">65</span>
+            <span class="mini-score" style="background:rgba(255,169,77,0.15);color:var(--high)">6.0</span>
+            <span class="mini-score" style="background:rgba(255,107,107,0.15);color:var(--critical)">4</span>
+            <span class="page-issue">Too long (3,500-4,200 words); should be 800-1,200</span>
+          </div>
+          <div class="page-score-row">
+            <span class="page-name">About Us</span>
+            <span class="mini-score" style="background:rgba(255,169,77,0.15);color:var(--high)">55</span>
+            <span class="mini-score" style="background:rgba(255,107,107,0.15);color:var(--critical)">5.0</span>
+            <span class="mini-score" style="background:rgba(255,107,107,0.15);color:var(--critical)">3</span>
+            <span class="page-issue">Missing individual team bios with credentials</span>
+          </div>
+          <div class="page-score-row">
+            <span class="page-name">Buying Guide</span>
+            <span class="mini-score" style="background:rgba(255,169,77,0.15);color:var(--high)">68</span>
+            <span class="mini-score" style="background:rgba(255,169,77,0.15);color:var(--high)">6.5</span>
+            <span class="mini-score" style="background:rgba(255,169,77,0.15);color:var(--high)">6</span>
+            <span class="page-issue">Verify regulatory accuracy; add update dates</span>
+          </div>
+          <div class="page-score-row">
+            <span class="page-name">Blog Post</span>
+            <span class="mini-score" style="background:rgba(255,169,77,0.15);color:var(--high)">55</span>
+            <span class="mini-score" style="background:rgba(255,107,107,0.15);color:var(--critical)">5.0</span>
+            <span class="mini-score" style="background:rgba(255,107,107,0.15);color:var(--critical)">4</span>
+            <span class="page-issue">Cannibalizes buying guide keywords</span>
+          </div>
+          <div class="page-score-row">
+            <span class="page-name">Location (Lagos)</span>
+            <span class="mini-score" style="background:rgba(255,169,77,0.15);color:var(--high)">60</span>
+            <span class="mini-score" style="background:rgba(255,169,77,0.15);color:var(--high)">5.5</span>
+            <span class="mini-score" style="background:rgba(255,107,107,0.15);color:var(--critical)">5</span>
+            <span class="page-issue">Missing specific price data and neighborhoods</span>
+          </div>
+          <div class="page-score-row">
+            <span class="page-name">Selling Page</span>
+            <span class="mini-score" style="background:rgba(255,169,77,0.15);color:var(--high)">55</span>
+            <span class="mini-score" style="background:rgba(255,107,107,0.15);color:var(--critical)">5.0</span>
+            <span class="mini-score" style="background:rgba(255,107,107,0.15);color:var(--critical)">3</span>
+            <span class="page-issue">No fee/commission transparency</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>2.3 Cross-Site Content Issues</h3>
+        <table class="audit-table">
+          <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="severity critical">Critical</span></td><td>Content cannibalization between <code>/buying-property-in-algarve/</code> and <code>/buying-a-property-in-portugal/</code></td></tr>
+            <tr><td><span class="severity critical">Critical</span></td><td>YMYL content may be outdated &mdash; Golden Visa suspended Oct 2023, NHR closed Jan 2024</td></tr>
+            <tr><td><span class="severity high">High</span></td><td>No author attribution on any content pages</td></tr>
+            <tr><td><span class="severity high">High</span></td><td>No "Last Updated" dates on informational pages</td></tr>
+            <tr><td><span class="severity high">High</span></td><td>Selling page lacks fee/commission transparency</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Homepage too content-heavy &mdash; dilutes keyword focus and buries CTAs</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Blog publishes primarily in Dutch, limiting English AI citation potential</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>2.4 Readability</h3>
+        <table class="audit-table">
+          <thead><tr><th>Metric</th><th>Current</th><th>Target</th></tr></thead>
+          <tbody>
+            <tr><td>Flesch-Kincaid Grade Level</td><td style="color:var(--high)">10-12</td><td style="color:var(--pass)">8-9</td></tr>
+            <tr><td colspan="3" style="color:var(--text-dim);font-size:0.82rem">Portuguese legal terminology (escritura, CPCV, IMT) pushes complexity higher. Recommendation: Add glossary or tooltip definitions.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 3: ON-PAGE SEO -->
+  <div class="section" id="sec-onpage">
+    <div class="section-header" onclick="toggleSection('sec-onpage')">
+      <h2>
+        <span class="section-icon" style="background:rgba(255,212,59,0.12);color:var(--medium)">&#128196;</span>
+        3. On-Page SEO
+      </h2>
+      <div class="section-score">
+        <span class="score-num" style="color:var(--score-mid)">55</span>
+        <span class="score-max">/100</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="subsection">
+        <h3>3.1 Title Tags &amp; Meta Descriptions</h3>
+        <table class="audit-table">
+          <thead><tr><th>Element</th><th>Value</th><th>Assessment</th></tr></thead>
+          <tbody>
+            <tr><td>Homepage Title</td><td><code>Real Estate Agents in Lagos, Portugal | ten Hoopen Realty</code></td><td style="color:var(--pass)">Good &mdash; includes primary keyword + brand</td></tr>
+            <tr><td>Meta Description</td><td><code>"Deeply rooted in the Algarve region..."</code></td><td style="color:var(--medium)">Adequate but could be more action-oriented</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>3.2 Heading Structure</h3>
+        <table class="audit-table">
+          <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="severity medium">Medium</span></td><td>Multiple H1 elements on homepage</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Duplicate H2s ("DISCOVER THE ALGARVE" appears in variations)</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Headings are descriptive, not question-based &mdash; poor for AI extraction</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Heading hierarchy skips levels on some pages</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>3.3 Internal Linking</h3>
+        <table class="audit-table">
+          <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="severity medium">Medium</span></td><td>Navigation is thin &mdash; only 2 primary items (Properties, Contact)</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Service pages not linked from primary navigation</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Blog/insights section not in main navigation</td></tr>
+            <tr><td><span class="severity low">Low</span></td><td><code>/blog/</code> returns 404 &mdash; content lives at <code>/insights/</code> or <code>/news/</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>3.4 Images</h3>
+        <table class="audit-table">
+          <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="severity high">High</span></td><td>Vast majority of images lack descriptive alt text</td></tr>
+            <tr><td><span class="severity high">High</span></td><td>Property carousel images have no alt text or titles</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Logo, partner logos, team photo, award badge &mdash; all missing alt text</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Flag icons for language switching lack alt text</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 4: SCHEMA -->
+  <div class="section" id="sec-schema">
+    <div class="section-header" onclick="toggleSection('sec-schema')">
+      <h2>
+        <span class="section-icon" style="background:rgba(255,107,107,0.12);color:var(--critical)">&#128300;</span>
+        4. Schema / Structured Data
+      </h2>
+      <div class="section-score">
+        <span class="score-num" style="color:var(--score-bad)">35</span>
+        <span class="score-max">/100</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="subsection">
+        <h3>4.1 Current Implementation</h3>
+        <p style="font-size:0.85rem;margin-bottom:0.75rem;color:var(--text-dim)"><strong style="color:var(--text)">Detected:</strong> Organization + RealEstateAgent (dual type), WebSite schema</p>
+        <table class="audit-table">
+          <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+          <tbody>
+            <tr><td><span class="severity critical">Critical</span></td><td>Missing <code>@context</code> if standalone schema block</td></tr>
+            <tr><td><span class="severity critical">Critical</span></td><td>Missing <code>telephone</code> &mdash; required for LocalBusiness rich results</td></tr>
+            <tr><td><span class="severity critical">Critical</span></td><td>Missing <code>geo</code> coordinates &mdash; essential for local search</td></tr>
+            <tr><td><span class="severity high">High</span></td><td>Logo uses SVG &mdash; Google prefers raster images (PNG/JPG/WebP)</td></tr>
+            <tr><td><span class="severity high">High</span></td><td>Missing <code>openingHoursSpecification</code></td></tr>
+            <tr><td><span class="severity high">High</span></td><td>Missing <code>sameAs</code> social profile links</td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Missing <code>contactPoint</code> with <code>availableLanguage</code></td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Missing <code>priceRange</code></td></tr>
+            <tr><td><span class="severity medium">Medium</span></td><td>Missing <code>areaServed</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>4.2 Missing Schema by Page Type</h3>
+        <div class="schema-grid">
+          <div class="schema-card missing">
+            <div class="schema-type">Property Pages</div>
+            <div class="schema-status">Missing: RealEstateListing + Offer</div>
+            <div class="schema-action">Priority: Critical</div>
+          </div>
+          <div class="schema-card missing">
+            <div class="schema-type">All Interior Pages</div>
+            <div class="schema-status">Missing: BreadcrumbList</div>
+            <div class="schema-action">Priority: High</div>
+          </div>
+          <div class="schema-card missing">
+            <div class="schema-type">Blog Posts</div>
+            <div class="schema-status">Missing: Article / BlogPosting + author</div>
+            <div class="schema-action">Priority: High</div>
+          </div>
+          <div class="schema-card missing">
+            <div class="schema-type">Listing Pages</div>
+            <div class="schema-status">Missing: ItemList + ListItem</div>
+            <div class="schema-action">Priority: High</div>
+          </div>
+          <div class="schema-card missing">
+            <div class="schema-type">About Us</div>
+            <div class="schema-status">Missing: Person schema for team</div>
+            <div class="schema-action">Priority: High</div>
+          </div>
+          <div class="schema-card missing">
+            <div class="schema-type">Buying Guides</div>
+            <div class="schema-status">Missing: FAQPage</div>
+            <div class="schema-action">Priority: High</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>4.3 Rich Results Eligibility</h3>
+        <table class="audit-table">
+          <thead><tr><th>Rich Result</th><th>Status</th><th>Action Needed</th></tr></thead>
+          <tbody>
+            <tr><td>Local Business Panel</td><td><span class="severity medium">Partial</span></td><td>Add telephone, geo, hours, sameAs</td></tr>
+            <tr><td>Breadcrumbs</td><td><span class="severity critical">Missing</span></td><td>Enable in Yoast or add manually</td></tr>
+            <tr><td>Article</td><td><span class="severity critical">Missing</span></td><td>Add to blog posts with Person author</td></tr>
+            <tr><td>Product / Listing</td><td><span class="severity critical">Missing</span></td><td>Add RealEstateListing on property pages</td></tr>
+            <tr><td>ItemList Carousel</td><td><span class="severity critical">Missing</span></td><td>Add to listing and location pages</td></tr>
+            <tr><td>FAQ</td><td><span class="severity critical">Missing</span></td><td>Add to guide pages</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 5: PERFORMANCE -->
+  <div class="section" id="sec-perf">
+    <div class="section-header" onclick="toggleSection('sec-perf')">
+      <h2>
+        <span class="section-icon" style="background:rgba(255,107,107,0.12);color:var(--critical)">&#9889;</span>
+        5. Performance / Core Web Vitals
+      </h2>
+      <div class="section-score">
+        <span class="score-num" style="color:var(--score-bad)">25</span>
+        <span class="score-max">/100</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="subsection">
+        <h3>5.1 Core Web Vitals (Mobile Estimates)</h3>
+        <div class="cwv-grid">
+          <div class="cwv-card">
+            <div class="cwv-label">LCP</div>
+            <div class="cwv-value" style="color:var(--critical)">5.0-8.0s</div>
+            <div class="cwv-threshold">Threshold: &le;2.5s</div>
+            <span class="cwv-status poor">POOR</span>
+          </div>
+          <div class="cwv-card">
+            <div class="cwv-label">INP</div>
+            <div class="cwv-value" style="color:var(--critical)">300-600ms</div>
+            <div class="cwv-threshold">Threshold: &le;200ms</div>
+            <span class="cwv-status poor">POOR</span>
+          </div>
+          <div class="cwv-card">
+            <div class="cwv-label">CLS</div>
+            <div class="cwv-value" style="color:var(--critical)">0.15-0.40</div>
+            <div class="cwv-threshold">Threshold: &le;0.1</div>
+            <span class="cwv-status poor">POOR</span>
+          </div>
+        </div>
+        <p style="text-align:center;margin-top:1rem;font-size:0.82rem;color:var(--text-dim)">Estimated PageSpeed Score: <strong style="color:var(--critical)">20-35</strong> (mobile) / <strong style="color:var(--high)">50-65</strong> (desktop)</p>
+      </div>
+
+      <div class="subsection">
+        <h3>5.2 JavaScript Payload (~1.0-1.3MB uncompressed)</h3>
+        <div class="payload-chart">
+          <div class="payload-item">
+            <span class="payload-label">Elementor</span>
+            <div class="payload-bar-track"><div class="payload-bar-fill" style="width:70%;background:linear-gradient(90deg,#ff6b6b,#ffa94d)">~350KB</div></div>
+          </div>
+          <div class="payload-item">
+            <span class="payload-label">Tidio Chat</span>
+            <div class="payload-bar-track"><div class="payload-bar-fill" style="width:80%;background:linear-gradient(90deg,#ff6b6b,#ffa94d)">~300-500KB</div></div>
+          </div>
+          <div class="payload-item">
+            <span class="payload-label">jQuery + Migrate</span>
+            <div class="payload-bar-track"><div class="payload-bar-fill" style="width:18%;background:linear-gradient(90deg,#ffd43b,#ffa94d)">~90KB</div></div>
+          </div>
+          <div class="payload-item">
+            <span class="payload-label">Google Tag Manager</span>
+            <div class="payload-bar-track"><div class="payload-bar-fill" style="width:16%;background:linear-gradient(90deg,#ffd43b,#ffa94d)">~80KB</div></div>
+          </div>
+          <div class="payload-item">
+            <span class="payload-label">Facebook Pixel</span>
+            <div class="payload-bar-track"><div class="payload-bar-fill" style="width:12%;background:linear-gradient(90deg,#ffd43b,#69db7c)">~60KB</div></div>
+          </div>
+          <div class="payload-item">
+            <span class="payload-label">GTranslate</span>
+            <div class="payload-bar-track"><div class="payload-bar-fill" style="width:15%;background:linear-gradient(90deg,#ffd43b,#69db7c)">~50-100KB</div></div>
+          </div>
+          <div class="payload-item">
+            <span class="payload-label">Google Analytics</span>
+            <div class="payload-bar-track"><div class="payload-bar-fill" style="width:10%;background:linear-gradient(90deg,#69db7c,#51cf66)">~50KB</div></div>
+          </div>
+          <div class="payload-item">
+            <span class="payload-label">Owl Carousel</span>
+            <div class="payload-bar-track"><div class="payload-bar-fill" style="width:8%;background:linear-gradient(90deg,#69db7c,#51cf66)">~40KB</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>5.3 LCP Bottlenecks</h3>
+        <table class="audit-table">
+          <thead><tr><th>#</th><th>Bottleneck</th><th>Est. Impact</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Owl Carousel hero &mdash; browser can't discover image until JS executes</td><td style="color:var(--critical)">+1.5-3.0s</td></tr>
+            <tr><td>2</td><td>Render-blocking CSS chain &mdash; Elementor loads 500-700KB CSS</td><td style="color:var(--critical)">+1.5-3.0s</td></tr>
+            <tr><td>3</td><td>No <code>fetchpriority="high"</code> on LCP image</td><td style="color:var(--high)">Moderate</td></tr>
+            <tr><td>4</td><td>No <code>&lt;link rel="preload"&gt;</code> for hero image</td><td style="color:var(--high)">Moderate</td></tr>
+            <tr><td>5</td><td>Cloudflare challenge scripts on first visit</td><td style="color:var(--high)">+1-3s</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>5.4 CLS Sources</h3>
+        <table class="audit-table">
+          <thead><tr><th>Source</th><th>Est. CLS</th></tr></thead>
+          <tbody>
+            <tr><td>Owl Carousel initialization</td><td style="color:var(--critical)">0.05-0.20</td></tr>
+            <tr><td>Tidio Chat widget injection</td><td style="color:var(--high)">0.02-0.10</td></tr>
+            <tr><td>Web font swap (FOUT)</td><td style="color:var(--high)">0.02-0.08</td></tr>
+            <tr><td>GTranslate bar insertion</td><td style="color:var(--medium)">0.01-0.05</td></tr>
+            <tr><td>Images without dimensions</td><td style="color:var(--high)">0.01-0.10</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 6: AI SEARCH READINESS -->
+  <div class="section" id="sec-ai">
+    <div class="section-header" onclick="toggleSection('sec-ai')">
+      <h2>
+        <span class="section-icon" style="background:rgba(162,155,254,0.12);color:var(--accent-light)">&#129302;</span>
+        6. AI Search Readiness
+      </h2>
+      <div class="section-score">
+        <span class="score-num" style="color:var(--score-bad)">38</span>
+        <span class="score-max">/100</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="subsection">
+        <h3>6.1 GEO Health Breakdown</h3>
+        <div class="score-breakdown" style="max-width:500px">
+          <div class="score-bar-item">
+            <div class="score-bar-label"><span>Citability</span><span>30/100</span></div>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:30%;background:var(--score-bad)"></div></div>
+          </div>
+          <div class="score-bar-item">
+            <div class="score-bar-label"><span>Structural Readability</span><span>45/100</span></div>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:45%;background:var(--score-bad)"></div></div>
+          </div>
+          <div class="score-bar-item">
+            <div class="score-bar-label"><span>Multi-Modal Content</span><span>25/100</span></div>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:25%;background:var(--score-bad)"></div></div>
+          </div>
+          <div class="score-bar-item">
+            <div class="score-bar-label"><span>Authority &amp; Brand Signals</span><span>40/100</span></div>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:40%;background:var(--score-bad)"></div></div>
+          </div>
+          <div class="score-bar-item">
+            <div class="score-bar-label"><span>Technical Accessibility</span><span>50/100</span></div>
+            <div class="score-bar-track"><div class="score-bar-fill" style="width:50%;background:var(--score-mid)"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>6.2 AI Crawler Access</h3>
+        <table class="audit-table">
+          <thead><tr><th>Crawler</th><th>Status</th><th>Recommendation</th></tr></thead>
+          <tbody>
+            <tr><td>GPTBot (OpenAI)</td><td><span class="severity pass">Allowed</span></td><td>Explicitly Allow</td></tr>
+            <tr><td>OAI-SearchBot</td><td><span class="severity pass">Allowed</span></td><td>Explicitly Allow</td></tr>
+            <tr><td>ClaudeBot (Anthropic)</td><td><span class="severity pass">Allowed</span></td><td>Explicitly Allow</td></tr>
+            <tr><td>PerplexityBot</td><td><span class="severity pass">Allowed</span></td><td>Explicitly Allow</td></tr>
+            <tr><td>CCBot (Common Crawl)</td><td><span class="severity medium">Allowed</span></td><td style="color:var(--critical)">Block (training only)</td></tr>
+            <tr><td>cohere-ai</td><td><span class="severity medium">Allowed</span></td><td style="color:var(--critical)">Block (training only)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <h3>6.3 llms.txt Status</h3>
+        <div style="background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.2);border-radius:10px;padding:1rem;display:flex;align-items:center;gap:0.75rem">
+          <span style="font-size:1.5rem">&#10060;</span>
+          <div>
+            <div style="font-weight:600;color:var(--critical)">NOT PRESENT (404)</div>
+            <div style="font-size:0.82rem;color:var(--text-dim)">No Algarve real estate agency has one yet &mdash; first-mover advantage available</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>6.4 Platform Scores</h3>
+        <div class="platform-scores">
+          <div class="platform-card">
+            <div class="platform-name">Google AI Overviews</div>
+            <div class="platform-score" style="color:var(--score-bad)">35<span style="font-size:0.8rem;color:var(--text-dim)">/100</span></div>
+            <div class="platform-gap">No FAQ schema, no sourced statistics</div>
+          </div>
+          <div class="platform-card">
+            <div class="platform-name">ChatGPT Web Search</div>
+            <div class="platform-score" style="color:var(--score-bad)">30<span style="font-size:0.8rem;color:var(--text-dim)">/100</span></div>
+            <div class="platform-gap">No llms.txt, weak brand signals</div>
+          </div>
+          <div class="platform-card">
+            <div class="platform-name">Perplexity</div>
+            <div class="platform-score" style="color:var(--score-bad)">35<span style="font-size:0.8rem;color:var(--text-dim)">/100</span></div>
+            <div class="platform-gap">No inline citations, no data attribution</div>
+          </div>
+          <div class="platform-card">
+            <div class="platform-name">Bing Copilot</div>
+            <div class="platform-score" style="color:var(--score-bad)">40<span style="font-size:0.8rem;color:var(--text-dim)">/100</span></div>
+            <div class="platform-gap">Better due to Bing's on-page SEO weighting</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>6.5 Brand Signal Gaps</h3>
+        <table class="audit-table">
+          <thead><tr><th>Signal</th><th>Status</th><th>Impact</th></tr></thead>
+          <tbody>
+            <tr><td>Wikipedia entity</td><td><span class="severity critical">None</span></td><td style="color:var(--critical)">High negative</td></tr>
+            <tr><td>Reddit mentions</td><td><span class="severity high">Minimal</span></td><td style="color:var(--critical)">High negative</td></tr>
+            <tr><td>YouTube presence</td><td><span class="severity high">Minimal</span></td><td style="color:var(--critical)">Highest negative (~0.737 correlation)</td></tr>
+            <tr><td>Google Reviews</td><td><span class="severity pass">4.9/5 (39)</span></td><td style="color:var(--pass)">Moderate positive (low count)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 7: ACCESSIBILITY -->
+  <div class="section" id="sec-a11y">
+    <div class="section-header" onclick="toggleSection('sec-a11y')">
+      <h2>
+        <span class="section-icon" style="background:rgba(255,169,77,0.12);color:var(--high)">&#9855;</span>
+        7. Accessibility Issues
+      </h2>
+      <div class="section-score">
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div class="section-body">
+      <table class="audit-table">
+        <thead><tr><th>Severity</th><th>Issue</th></tr></thead>
+        <tbody>
+          <tr><td><span class="severity high">High</span></td><td>Vast majority of images lack descriptive alt attributes</td></tr>
+          <tr><td><span class="severity medium">Medium</span></td><td>Email subscription form field lacks associated <code>&lt;label&gt;</code> element</td></tr>
+          <tr><td><span class="severity medium">Medium</span></td><td>No ARIA labels on interactive elements (carousels, modals)</td></tr>
+          <tr><td><span class="severity medium">Medium</span></td><td>"READ MORE" links lack context-specific titles or aria-labels</td></tr>
+          <tr><td><span class="severity medium">Medium</span></td><td>Social media icon buttons may lack text alternatives</td></tr>
+          <tr><td><span class="severity low">Low</span></td><td>Focus management issues with custom JavaScript click handlers</td></tr>
+          <tr><td><span class="severity low">Low</span></td><td>Elementor popup modals need keyboard accessibility verification</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 8: SITE ARCHITECTURE -->
+  <div class="section" id="sec-arch">
+    <div class="section-header" onclick="toggleSection('sec-arch')">
+      <h2>
+        <span class="section-icon" style="background:rgba(162,155,254,0.12);color:var(--accent-light)">&#127959;</span>
+        Appendix: Site Architecture
+      </h2>
+      <div class="section-score">
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <div class="subsection">
+        <h3>Internal Link Map</h3>
+        <div class="arch-grid">
+          <div class="arch-group">
+            <h4>Navigation</h4>
+            <ul>
+              <li>/properties/</li>
+              <li>/contact-us/</li>
+              <li>/pt/home-pt/</li>
+              <li>/nl/home-nl/</li>
+            </ul>
+          </div>
+          <div class="arch-group">
+            <h4>Location Pages</h4>
+            <ul>
+              <li>/meia-praia-lagos/</li>
+              <li>/property-for-sale-in-lagos/</li>
+              <li>/luz/</li>
+              <li>/burgau/</li>
+              <li>/salema/</li>
+              <li>/portimao/</li>
+              <li>/sagres/</li>
+            </ul>
+          </div>
+          <div class="arch-group">
+            <h4>Services</h4>
+            <ul>
+              <li>/selling/</li>
+              <li>/buying-property-in-algarve/</li>
+              <li>/construction/</li>
+              <li>/pools/</li>
+              <li>/development/</li>
+            </ul>
+          </div>
+          <div class="arch-group">
+            <h4>Content</h4>
+            <ul>
+              <li>/about-us/</li>
+              <li>/insights/</li>
+              <li>/category/property-market/</li>
+              <li>/category/general-news/</li>
+              <li>/category/lifestyle/</li>
+            </ul>
+          </div>
+          <div class="arch-group">
+            <h4>Legal</h4>
+            <ul>
+              <li>/terms-and-conditions/</li>
+              <li>/privacy-policy/</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Property Listings (Query-Parameter URLs)</h3>
+        <div style="overflow-x:auto">
+          <table class="audit-table">
+            <thead><tr><th>Reference</th><th>Location</th></tr></thead>
+            <tbody>
+              <tr><td><code>V1292</code></td><td>Cali&ccedil;as, Lagos</td></tr>
+              <tr><td><code>T1182A</code></td><td>Canavial, Lagos</td></tr>
+              <tr><td><code>T1142</code></td><td>Cabanas Velhas, Vila do Bispo</td></tr>
+              <tr><td><code>V1291</code></td><td>Praia da Luz, Lagos</td></tr>
+              <tr><td><code>A1290</code></td><td>Meia Praia, Lagos</td></tr>
+              <tr><td><code>A1289</code></td><td>Burgau, Lagos</td></tr>
+              <tr><td><code>T1286</code></td><td>Centro, Lagos</td></tr>
+              <tr><td><code>V1285</code></td><td>Vale Da Lama, Lagos</td></tr>
+              <tr><td><code>V1284</code></td><td>Atalaia, Lagos</td></tr>
+              <tr><td><code>T1227A</code></td><td>Luz, Lagos</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Third-Party Integrations</h3>
+        <div class="arch-grid">
+          <div class="arch-group">
+            <h4>Analytics &amp; Marketing</h4>
+            <ul>
+              <li>GTM: GTM-PZ9NW482</li>
+              <li>GA4: GT-P8ZPM8V</li>
+              <li>FB Pixel: 335856...</li>
+            </ul>
+          </div>
+          <div class="arch-group">
+            <h4>Site Features</h4>
+            <ul>
+              <li>Tidio Chat</li>
+              <li>GTranslate</li>
+              <li>Proppy.app</li>
+              <li>Owl Carousel</li>
+            </ul>
+          </div>
+          <div class="arch-group">
+            <h4>Infrastructure</h4>
+            <ul>
+              <li>Elementor (builder)</li>
+              <li>Cloudflare (CDN)</li>
+              <li>WordPress (CMS)</li>
+              <li>Yoast SEO</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    SEO Audit Report for tenhoopenrealty.com &bull; Generated March 23, 2026 &bull; Confidential
+  </div>
+
+</div>
+
+<script>
+function toggleSection(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
