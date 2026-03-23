@@ -93,27 +93,80 @@
 
   /* Score Journey */
   .journey {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    padding: 2rem;
+    padding: 1.5rem;
     background: var(--surface);
     border-radius: 16px;
     border: 1px solid var(--border);
     margin-bottom: 2rem;
-    flex-wrap: wrap;
   }
-  .journey-score {
-    text-align: center;
-    padding: 1rem 1.5rem;
-  }
-  .journey-score .score-num { font-size: 3rem; font-weight: 800; display: block; line-height: 1; }
-  .journey-score .score-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-top: 0.25rem; }
-  .journey-arrow {
-    font-size: 2rem;
-    color: var(--text-dim);
+  .journey-track {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
     padding: 0 0.5rem;
+  }
+  .journey-track::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 2rem;
+    right: 2rem;
+    height: 3px;
+    background: linear-gradient(90deg, var(--critical), var(--high), var(--medium), var(--score-ok), var(--pass));
+    border-radius: 2px;
+    transform: translateY(-12px);
+    z-index: 0;
+  }
+  .journey-step {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+  }
+  .journey-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    margin: 0 auto 0.5rem;
+    border: 3px solid var(--surface);
+    box-shadow: 0 0 0 2px var(--border);
+  }
+  .journey-step .score-num { font-size: 1.8rem; font-weight: 800; display: block; line-height: 1; }
+  .journey-step .score-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-top: 0.2rem; display: block; }
+
+  @media (max-width: 600px) {
+    .journey { padding: 1.25rem; }
+    .journey-track {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 0;
+    }
+    .journey-track::before {
+      top: 1rem;
+      bottom: 1rem;
+      left: 1.1rem;
+      right: auto;
+      width: 3px;
+      height: auto;
+      background: linear-gradient(180deg, var(--critical), var(--high), var(--medium), var(--score-ok), var(--pass));
+      transform: none;
+    }
+    .journey-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-align: left;
+      padding: 0.6rem 0;
+    }
+    .journey-dot {
+      margin: 0;
+      flex-shrink: 0;
+      width: 12px; height: 12px;
+    }
+    .journey-step .score-num { font-size: 1.5rem; display: inline; }
+    .journey-step .score-label { display: inline; margin-left: 0.5rem; font-size: 0.72rem; }
+    .journey-step-text { display: flex; align-items: baseline; }
   }
 
   /* Timeline Overview */
@@ -341,29 +394,42 @@
 
   <!-- SCORE JOURNEY -->
   <div class="journey">
-    <div class="journey-score">
-      <span class="score-num" style="color:var(--critical)">48</span>
-      <span class="score-label">Current</span>
-    </div>
-    <span class="journey-arrow">&#8594;</span>
-    <div class="journey-score">
-      <span class="score-num" style="color:var(--high)">60</span>
-      <span class="score-label">Week 2</span>
-    </div>
-    <span class="journey-arrow">&#8594;</span>
-    <div class="journey-score">
-      <span class="score-num" style="color:var(--medium)">70</span>
-      <span class="score-label">Week 4</span>
-    </div>
-    <span class="journey-arrow">&#8594;</span>
-    <div class="journey-score">
-      <span class="score-num" style="color:var(--score-ok)">78</span>
-      <span class="score-label">Month 2</span>
-    </div>
-    <span class="journey-arrow">&#8594;</span>
-    <div class="journey-score">
-      <span class="score-num" style="color:var(--pass)">85+</span>
-      <span class="score-label">Month 3+</span>
+    <div class="journey-track">
+      <div class="journey-step">
+        <div class="journey-dot" style="background:var(--critical)"></div>
+        <div class="journey-step-text">
+          <span class="score-num" style="color:var(--critical)">48</span>
+          <span class="score-label">Current</span>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-dot" style="background:var(--high)"></div>
+        <div class="journey-step-text">
+          <span class="score-num" style="color:var(--high)">60</span>
+          <span class="score-label">Week 2</span>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-dot" style="background:var(--medium)"></div>
+        <div class="journey-step-text">
+          <span class="score-num" style="color:var(--medium)">70</span>
+          <span class="score-label">Week 4</span>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-dot" style="background:var(--score-ok)"></div>
+        <div class="journey-step-text">
+          <span class="score-num" style="color:var(--score-ok)">78</span>
+          <span class="score-label">Month 2</span>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-dot" style="background:var(--pass)"></div>
+        <div class="journey-step-text">
+          <span class="score-num" style="color:var(--pass)">85+</span>
+          <span class="score-label">Month 3+</span>
+        </div>
+      </div>
     </div>
   </div>
 
